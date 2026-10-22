@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07070a">
+  <meta name="description" content="Motion Forge Studio turns your script, voiceover, and SRT subtitles into cinematic motion-graphics videos.">
+  <title>Motion Forge Studio</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Motion Forge Studio home">
+        <span class="brand-mark"><span></span><span></span><span></span></span>
+        <span><b>MOTION FORGE</b><small>STUDIO / VIDEO SYSTEM</small></span>
+      </a>
+      <button class="ghost-button" id="settingsOpen" type="button"><span class="gear">⚙</span> Renderer settings</button>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="eyebrow"><span class="status-dot"></span> FIXED SCENE ENGINE · HYPERFRAMES</div>
+        <h1>Turn your words<br>into <em>motion.</em></h1>
+        <p class="hero-copy">Your script. Your voiceover. Your subtitles.<br>A cinematic video — without a timeline editor.</p>
+        <div class="hero-tags"><span>BLACK / WHITE / VIOLET</span><span>NO GENERATED VOICE</span><span>REUSABLE WORKFLOW</span></div>
+      </section>
+
+      <section class="workspace">
+        <div class="form-column">
+          <div class="section-heading"><div><span class="step">01</span><h2>Your content</h2></div><button class="text-button" id="loadSample" type="button">Load sample</button></div>
+
+          <label class="field-label" for="scriptInput">SCRIPT <span>Required</span></label>
+          <textarea id="scriptInput" rows="5" placeholder="Paste your complete voiceover script here…"></textarea>
+          <div class="field-note"><span id="scriptCount">0 characters</span><span>Used to guide scene selection</span></div>
+
+          <div class="upload-card">
+            <div class="upload-icon">♫</div>
+            <div class="upload-info"><b>Voiceover audio</b><small>MP3, WAV, M4A, AAC, OGG or MP4 audio</small><span class="file-name" id="audioName">No file selected</span></div>
+            <label class="file-button">Choose file<input id="audioInput" type="file" accept="audio/*,.mp3,.wav,.m4a,.aac,.ogg,.mp4"></label>
+          </div>
+          <div class="upload-card">
+            <div class="upload-icon">CC</div>
+            <div class="upload-info"><b>SRT subtitles</b><small>Preserves your exact subtitle text and timings</small><span class="file-name" id="srtName">No file selected</span></div>
+            <label class="file-button">Choose file<input id="srtInput" type="file" accept=".srt,text/plain"></label>
+          </div>
+          <div class="validation" id="validationBox" aria-live="polite">
+            <span class="validation-icon">i</span><span id="validationText">Add a script and SRT file to validate your project.</span>
+          </div>
+
+          <div class="section-heading settings-heading"><div><span class="step">02</span><h2>Output settings</h2></div></div>
+          <div class="format-grid">
+            <button class="format-option selected" data-format="vertical" type="button">
+              <span class="format-preview vertical-preview"><i></i></span><span><b>Vertical</b><small>9:16 · 1080 × 1920</small></span><span class="radio-dot"></span>
+            </button>
+            <button class="format-option" data-format="landscape" type="button">
+              <span class="format-preview landscape-preview"><i></i></span><span><b>Landscape</b><small>16:9 · 1920 × 1080</small></span><span class="radio-dot"></span>
+            </button>
+          </div>
+          <div class="options-row">
+            <div><b>Timed sound effects</b><small>Whooshes and soft impact accents · no music</small></div>
+            <label class="switch"><input type="checkbox" id="sfxToggle" checked><span></span></label>
+          </div>
+          <div class="options-row">
+            <div><b>Subtitle captions</b><small>Show exact SRT lines in the video</small></div>
+            <label class="switch"><input type="checkbox" id="captionsToggle" checked><span></span></label>
+          </div>
+
+          <button class="generate-button" id="generateButton" type="button"><span class="sparkle">✦</span><span>Generate video</span><span class="button-arrow">↗</span></button>
+          <p class="privacy-note"><span>▣</span> Your files are only sent to your configured renderer when you generate.</p>
+          <div class="render-status hidden" id="renderStatus" aria-live="polite">
+            <div class="status-line"><span class="spinner" id="statusSpinner"></span><b id="statusTitle">Preparing project…</b><span id="statusPercent"></span></div>
+            <div class="progress-track"><div id="progressFill"></div></div>
+            <p id="statusMessage">Checking your files.</p>
+            <a class="download-button hidden" id="downloadLink" href="#" download="motion-forge-video.mp4">Download MP4 ↓</a>
+          </div>
+        </div>
+
+        <aside class="preview-column">
+          <div class="preview-heading"><div><span class="step">LIVE PREVIEW</span><h2>Scene monitor</h2></div><span class="preview-live"><i></i> PREVIEW</span></div>
+          <div class="preview-stage-wrap" id="previewWrap">
+            <div class="preview-stage vertical-stage" id="previewStage">
+              <div class="preview-grid"></div><div class="preview-vignette"></div>
+              <div class="preview-orb"></div><div class="preview-ring"></div>
+              <div class="preview-topline"><span>MOTION / 001</span><span id="previewRatio">9:16</span></div>
+              <div class="preview-scene" id="previewScene">
+                <div class="scene-kicker" id="sceneKicker">THE PROBLEM</div>
+                <div class="scene-title" id="sceneTitle">Boring<br><em>≠ worthless.</em></div>
+                <div class="scene-visual" id="sceneVisual"><span></span><span></span><span></span></div>
+                <div class="scene-caption" id="sceneCaption">Useful work solves real problems.</div>
+              </div>
+              <div class="preview-bottom"><span>MF / STUDIO</span><span id="sceneNumber">SCENE 01</span></div>
+              <div class="preview-caption hidden" id="previewCaption">Boring problem. Real service.</div>
+            </div>
+          </div>
+          <div class="preview-controls">
+            <button class="play-button" id="previewPlay" type="button" aria-label="Play preview">▶</button>
+            <div class="preview-track"><div id="previewTrackFill"></div></div>
+            <span id="previewTime">00:00</span>
+          </div>
+          <div class="scene-meta"><span><i class="violet-dot"></i> Fixed scene library</span><span id="sceneType">CINEMATIC HOOK</span></div>
+          <div class="preview-disclaimer">This is an animated design preview. A downloadable MP4 is created only when a real rendering service is connected.</div>
+          <div class="library-card">
+            <div class="library-card-head"><b>Scene library</b><span>5 TYPES</span></div>
+            <div class="scene-chips"><span>01 Hook</span><span>02 Type</span><span>03 Diagram</span><span>04 Impact</span><span>05 Outro</span></div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="workflow-strip">
+        <div><span>01</span><b>Upload</b><small>Script · Voiceover · SRT</small></div><i>→</i>
+        <div><span>02</span><b>Plan scenes</b><small>Rules, not random AI</small></div><i>→</i>
+        <div><span>03</span><b>Render</b><small>HyperFrames + FFmpeg</small></div><i>→</i>
+        <div><span>04</span><b>Download</b><small>Real MP4 output</small></div>
+      </section>
+    </main>
+    <footer><span>© MOTION FORGE STUDIO</span><span>BUILT FOR THE WORK, NOT THE HYPE.</span></footer>
+  </div>
+
+  <div class="modal-backdrop hidden" id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+    <div class="settings-modal">
+      <button class="modal-close" id="settingsClose" type="button" aria-label="Close settings">×</button>
+      <div class="eyebrow">CONNECTION</div><h2 id="settingsTitle">Renderer settings</h2>
+      <p class="modal-copy">The website is hosted separately from the video renderer. Add your renderer's public URL and API token here.</p>
+      <label class="field-label" for="rendererUrl">RENDERER BASE URL</label>
+      <input id="rendererUrl" type="url" placeholder="https://your-renderer.example.com">
+      <label class="field-label" for="rendererToken">RENDER API TOKEN</label>
+      <input id="rendererToken" type="password" placeholder="Paste the token set on your renderer host">
+      <div class="modal-warning"><b>Private tool only.</b> The token is saved in this browser's local storage. Do not share this browser profile or expose the token in a public repository.</div>
+      <div class="modal-actions"><button class="secondary-button" id="testConnection" type="button">Test connection</button><button class="generate-button compact" id="saveSettings" type="button">Save settings</button></div>
+      <p class="connection-result" id="connectionResult" aria-live="polite"></p>
+    </div>
+  </div>
+  <script src="./app.js"></script>
+</body>
+</html>
